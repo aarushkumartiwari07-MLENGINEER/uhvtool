@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Value-Based Life Self-Check | Universal Human Values</title>
+    <!-- 
+        Value-Based Life Self-Assessment Tool
+        A calm, reflective experience based on UHV principles.
+    -->
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e3f2fd 0%, #f1f8e9 100%);
+            --primary-color: #4db6ac;
+            --primary-hover: #00897b;
+            --text-color: #37474f;
+            --text-light: #607d8b;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --error-color: #ef9a9a;
+            --success-color: #81c784;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #263238;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .question-card.unanswered {
+            border-color: var(--error-color);
+            background-color: #fffbfa;
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            margin-bottom: 25px;
+            color: #37474f;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: block;
+            padding: 15px 20px;
+            border: 1px solid #eceff1;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .option-label:hover {
+            background-color: #f5fafd;
+            border-color: var(--primary-color);
+        }
+
+        .option-label input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .option-label input:checked + span::before {
+            border-color: var(--primary-color);
+            background-color: var(--primary-color);
+        }
+
+        .option-label span {
+            display: flex;
+            align-items: center;
+        }
+
+        .option-label span::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border: 2px solid #cfd8dc;
+            border-radius: 50%;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+
+        .option-label.selected {
+            background-color: #e0f2f1;
+            border-color: var(--primary-color);
+            color: var(--primary-hover);
+        }
+
+        /* Action Buttons */
+        .actions {
+            text-align: center;
+            margin-top: 40px;
+            padding-bottom: 60px;
+        }
+
+        button {
+            padding: 16px 45px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            border: none;
+            letter-spacing: 1px;
+        }
+
+        #submitBtn {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(77, 182, 172, 0.3);
+        }
+
+        #submitBtn:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(77, 182, 172, 0.4);
+        }
+
+        #submitBtn:disabled {
+            background-color: #cfd8dc;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+
+        /* Result Section */
+        #resultSection {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+            animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e0f2f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-hover);
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .category-heading {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #263238;
+        }
+
+        .review-message {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 35px;
+            line-height: 1.8;
+        }
+
+        .suggestions-list {
+            text-align: left;
+            background: #f9fbfb;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+
+        .suggestions-list h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #455a64;
+        }
+
+        .suggestions-list ul {
+            list-style: none;
+        }
+
+        .suggestions-list li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            color: #546e7a;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .suggestions-list li:last-child {
+            border-bottom: none;
+        }
+
+        .suggestions-list li::before {
+            content: "✨";
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        #restartBtn {
+            background-color: #f5f5f5;
+            color: #757575;
+        }
+
+        #restartBtn:hover {
+            background-color: #eeeeee;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .container { padding: 10px; }
+            .question-card { padding: 20px; }
+            .question-text { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Value-Based Life Self-Check</h1>
+            <p class="subtitle">A moment of calm reflection to explore how your actions align with universal human values.</p>
+        </header>
+
+        <!-- Progress Overview -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span>Self-Reflective Journey</span>
+                <span id="progressLabel">0 of 10 completed</span>
+            </div>
+        </div>
+
+        <!-- Questions -->
+        <form id="quizForm">
+            <div id="questionsContainer">
+                <!-- Questions injected by JS -->
+            </div>
+
+            <div class="actions">
+                <button type="button" id="submitBtn" disabled>Show My Reflections ✨</button>
+            </div>
+        </form>
+
+        <!-- Results -->
+        <div id="resultSection">
+            <div class="score-circle" id="resultScore">0</div>
+            <h2 class="category-heading" id="resultCategory">Category Name</h2>
+            <p class="review-message" id="resultReview">Reflective message goes here...</p>
+            
+            <div class="suggestions-list">
+                <h3>Steps for further growth:</h3>
+                <ul id="suggestionsContainer"></ul>
+            </div>
+
+            <button type="button" id="restartBtn">Take Another Reflection</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                text: "Do you regularly question your own assumptions and beliefs to ensure they align with your truth?",
+                section: "Self-exploration"
+            },
+            {
+                id: 2,
+                text: "In difficult situations, do you prioritize the 'Right' path over the 'Convenient' path?",
+                section: "Ethical decision making"
+            },
+            {
+                id: 3,
+                text: "Do you believe that people are fundamentally good and base your interactions on that trust?",
+                section: "Relationships"
+            },
+            {
+                id: 4,
+                text: "Do you treat everyone you meet with dignity, regardless of their status or background?",
+                section: "Relationships"
+            },
+            {
+                id: 5,
+                text: "Are your words and actions consistently aligned, even when no one is watching?",
+                section: "Professional integrity"
+            },
+            {
+                id: 6,
+                text: "Do you take full responsibility for your mistakes instead of blaming circumstances or others?",
+                section: "Professional integrity"
+            },
+            {
+                id: 7,
+                text: "Do you feel a genuine sense of responsibility to help someone when you see them in need?",
+                section: "Relationships"
+            },
+            {
+                id: 8,
+                text: "Is your consumption pattern driven by genuine need rather than social comparison?",
+                section: "Sustainable living"
+            },
+            {
+                id: 9,
+                text: "Do you actively look for ways to reduce waste and conserve natural resources in your daily life?",
+                section: "Sustainable living"
+            },
+            {
+                id: 10,
+                text: "Do you strive to contribute to a peaceful atmosphere in your family and workplace?",
+                section: "Harmony"
+            }
+        ];
+
+        const resultsData = {
+            low: {
+                category: "Needs Improvement",
+                message: "This is a wonderful starting point for your journey. Recognizing where we stand is the first and most courageous step toward living a life rooted in conscious values.",
+                suggestions: [
+                    "Start a five-minute daily reflection journal before sleeping.",
+                    "Practice 'Deep Listening' - try to understand before being understood.",
+                    "Identify one core value you want to live by this week.",
+                    "Notice one thing you are grateful for every single morning.",
+                    "Observe your consumption habits for three days without judgment."
+                ]
+            },
+            medium: {
+                category: "Moderately Value-Oriented",
+                message: "You're on a beautiful path, and your awareness is clearly guiding many of your choices. There is a steady foundation of values that with a bit more focus, can become your unshakable nature.",
+                suggestions: [
+                    "Try to maintain consistency in your integrity even in low-stakes situations.",
+                    "Engage in community service or help someone without expecting a return.",
+                    "Practice responding to conflict with calm rather than reacting with emotion.",
+                    "Read literature on ethics and human values to deepen your conceptual clarity.",
+                    "Set boundaries that protect your peace and the peace of others."
+                ]
+            },
+            high: {
+                category: "Strong Value-Based Living",
+                message: "You are living with remarkable clarity and purpose. Your actions seem to flow from a deep understanding of universal values, serving as a quiet inspiration to those around you.",
+                suggestions: [
+                    "Share your journey with others to help them discover their own values.",
+                    "Focus on global harmony - how can your living affect the larger ecosystem?",
+                    "Mentor a younger colleague or friend in ethical decision-making.",
+                    "Work on mastering sustained inner peace even during chaotic times.",
+                    "Document your personal philosophy to pass on your wisdom to others."
+                ]
+            }
+        };
+
+        const questionsContainer = document.getElementById('questionsContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressLabel = document.getElementById('progressLabel');
+        const submitBtn = document.getElementById('submitBtn');
+        const quizForm = document.getElementById('quizForm');
+        const resultSection = document.getElementById('resultSection');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Initialization
+        function init() {
+            questionsContainer.innerHTML = '';
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `card-${q.id}`;
+                
+                card.innerHTML = `
+                    <span class="question-number">Reflecting on ${q.section}</span>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options">
+                        <label class="option-label" data-qindex="${index}">
+                            <input type="radio" name="q${q.id}" value="2">
+                            <span>Yes, definitely</span>
+                        </label>
+                        <label class="option-label" data-qindex="${index}">
+                            <input type="radio" name="q${q.id}" value="1">
+                            <span>Sometimes / Partially</span>
+                        </label>
+                        <label class="option-label" data-qindex="${index}">
+                            <input type="radio" name="q${q.id}" value="0">
+                            <span>No, not yet</span>
+                        </label>
+                    </div>
+                `;
+                questionsContainer.appendChild(card);
+            });
+
+            // Add event listeners to labels
+            const labels = document.querySelectorAll('.option-label');
+            labels.forEach(label => {
+                label.addEventListener('click', function() {
+                    const group = this.parentElement;
+                    group.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const card = this.closest('.question-card');
+                    card.classList.remove('unanswered');
+                    
+                    updateProgress();
+                });
+            });
+        }
+
+        function updateProgress() {
+            const total = questions.length;
+            const answered = new FormData(quizForm).getAll(/.*/).length; // Check how many radio groups are checked
+            
+            // Re-calculate accurately
+            let count = 0;
+            for(let i=1; i<=total; i++) {
+                if(document.querySelector(`input[name="q${i}"]:checked`)) count++;
+            }
+
+            const percent = (count / total) * 100;
+            progressFill.style.width = `${percent}%`;
+            progressLabel.innerText = `${count} of ${total} completed`;
+
+            if(count === total) {
+                submitBtn.disabled = false;
+            }
+        }
+
+        function handleSubmit() {
+            const formData = new FormData(quizForm);
+            let totalScore = 0;
+            let unanswered = [];
+
+            questions.forEach(q => {
+                const val = formData.get(`q${q.id}`);
+                if (val === null) {
+                    unanswered.push(q.id);
+                } else {
+                    totalScore += parseInt(val);
+                }
+            });
+
+            if (unanswered.length > 0) {
+                // Highlight unanswered
+                unanswered.forEach(id => {
+                    document.getElementById(`card-${id}`).classList.add('unanswered');
+                });
+                
+                // Scroll to first unanswered
+                const firstId = unanswered[0];
+                document.getElementById(`card-${firstId}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            showResults(totalScore);
+        }
+
+        function showResults(score) {
+            let data;
+            if (score <= 6) data = resultsData.low;
+            else if (score <= 14) data = resultsData.medium;
+            else data = resultsData.high;
+
+            document.getElementById('resultScore').innerText = `${score}/20`;
+            document.getElementById('resultCategory').innerText = data.category;
+            document.getElementById('resultReview').innerText = data.message;
+            
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            suggestionsContainer.innerHTML = '';
+            data.suggestions.forEach(s => {
+                const li = document.createElement('li');
+                li.innerText = s;
+                suggestionsContainer.appendChild(li);
+            });
+
+            // Transition
+            quizForm.style.display = 'none';
+            document.querySelector('header').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            resultSection.style.display = 'block';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restart() {
+            quizForm.reset();
+            document.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(c => c.classList.remove('unanswered'));
+            
+            quizForm.style.display = 'block';
+            document.querySelector('header').style.display = 'block';
+            document.querySelector('.progress-container').style.display = 'block';
+            resultSection.style.display = 'none';
+            
+            updateProgress();
+            submitBtn.disabled = true;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        submitBtn.addEventListener('click', handleSubmit);
+        restartBtn.addEventListener('click', restart);
+
+        init();
+    </script>
+</body>
+</html>
